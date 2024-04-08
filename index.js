@@ -33,7 +33,7 @@ bot.command('push', async (ctx) => {
         for (const chatId of groupChats) {
             await bot.api.sendMessage(chatId, formattedMessage, { parse_mode: 'MarkdownV2' }); // Указываем MarkdownV2 для форматирования
             cooldownGroups.add(chatId);
-            setTimeout(() => cooldownGroups.delete(chatId), 120000); // 2 минуты ограничения
+            setTimeout(() => cooldownGroups.delete(chatId), 300000); // 2 минуты ограничения
         }
         await ctx.reply('Сообщение было успешно отправлено в группы.');
     } catch (error) {
