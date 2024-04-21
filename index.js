@@ -6,11 +6,30 @@ const bot = new Bot(process.env.BOT_API_KEY);
 // Список пользователей, которые могут отправлять сообщения боту
 const authorizedUsers = ['785492955']; // Замените на реальные ID пользователей
 
-// Список групп, в которые бот будет пересылать сообщения
-const groupChats = ['-1001980493060'/*Тест на пидора*/, '-1559024516'/*МТС ЗС*/]; // Замените на реальные ID групп
 
+// Список групп, которые нужно проверять
+const groupChats = ['-1001980493060'/*Тест на пидора*//*МТС ЗС*/]; // Замените на реальные ID групп
+const groupChatsTime = ['-1001980493060'/*Тест на пидора*//*МТС ЗС*/, '-1002117570128']; // Замените на реальные ID групп
+const currentHour = new Date().getUTCHours() + 3; // Получаем текущий час в формате UTC и добавляем 3 часа для перевода в МСК
+const currentMinutes = new Date().getUTCMinutes(); 
+bot.on('message', async (ctx) => {
+    const chatId = ctx.chat?.id.toString();
+    
+    // Проверяем, является ли чат одной из указанных групп и находится ли текущее время в указанном диапазоне
+    if (groupChatsTime.includes(chatId) && (currentHour >= 16 || currentHour < 9)) {
+        // Если условия выполняются, отправляем сообщение о начале работы группы
+        if (ctx.message?.new_chat_members || ctx.message?.left_chat_member) {
+            // Если условия выполняются, игнорируем сообщение
+            return;
+        }
+        await ctx.reply('К сожалению, режим работы чата с 10:00 по 19:00 по мск. Сейчас в Москве: '+ currentHour+':'+ currentMinutes  +'. Обратитесь за помощью в поддержку на платформе, в соответствующем разделе.');
+    } else {
+        // Если условия не выполняются, продолжаем обработку сообщений
+        await next();
+    }
+});
 // Набор для отслеживания групп, в которых временно приостановлена отправка сообщений
-const cooldownGroups = new Set();
+const cooldownGroups = new Set() ;
 
 bot.command('push', async (ctx) => {
     // Проверяем, разрешен ли пользователь отправлять сообщения
@@ -42,7 +61,7 @@ bot.command('push', async (ctx) => {
     }
 });
 
-// Миддлвар для блокировки сообщений от пользователей в группах во время ограничения
+// Мидлвар для блокировки сообщений от пользователей в группах во время ограничения
 bot.on('message', async (ctx, next) => {
     const chatId = ctx.chat?.id.toString();
     if (ctx.chat?.type === 'supergroup' || ctx.chat?.type === 'group') {
@@ -58,8 +77,11 @@ bot.on('message', async (ctx, next) => {
     }
 });
 
-bot.catch((err) => {
+// Добавляем обработчик ошибок
+bot.catch((err, ctx) => {
     console.error('Ошибка бота:', err);
+    // Отправляем сообщение об ошибке в чат
 });
 
+// Запускаем бот
 bot.start();
