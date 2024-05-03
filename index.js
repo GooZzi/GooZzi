@@ -9,7 +9,7 @@ const bot = new Bot(process.env.BOT_API_KEY);
 const groupChats = ['-1001980493060']; // Замените на реальные ID групп
 const groupChatsTime = ['-1001980493060']; // Замените на реальные ID групп
 
-const authorizedUsers = ['785492955']; // Замените на реальные ID пользователей
+const authorizedUsers = ['785492955', '5603587091', '1270457445']; // Замените на реальные ID пользователей
 
 
 bot.on('message', async (ctx) => {
