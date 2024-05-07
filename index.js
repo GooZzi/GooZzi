@@ -8,30 +8,13 @@ const bot = new Bot(process.env.BOT_API_KEY);
 
 const groupChats = ['-1001980493060']; // Замените на реальные ID групп
 const groupChatsTime = ['-1001980493060']; // Замените на реальные ID групп
+const currentHour = new Date().getUTCHours() + 3; // Получаем текущий час в формате UTC и добавляем 3 часа для перевода в МСК
 
 const authorizedUsers = ['785492955', '5603587091', '1270457445']; // Замените на реальные ID пользователей
-
-
-bot.on('message', async (ctx) => {
-  const chatId = ctx.chat?.id.toString();
-  // Проверяем, является ли чат одной из указанных групп и находится ли текущее время в указанном диапазоне
-  if (groupChatsTime.includes(chatId)) {
-      // Если условия выполняются, проверяем, является ли пользователь авторизованным
-      const isAuthorized = authorizedUsers.includes(ctx.from.id.toString());
-      if (!isAuthorized) {
-        // Если пользователь не авторизован, отправляем сообщение о начале работы группы
-        if (ctx.message?.new_chat_members || ctx.message?.left_chat_member) {
-            // Если условия выполняются, игнорируем сообщение
-            return;
-        }
-        await ctx.reply('К сожалению, режим работы чата с 10:00 по 19:00 по мск. Обратитесь за помощью в поддержку на платформе, в соответствующем разделе.');
-      }
-  } else {
-      // Если условия не выполняются, продолжаем обработку сообщений
-      await next();
-  }
-});
-
+function escapeMarkdownV2(text) {
+    const escapeChars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+    return text.split('').map(c => escapeChars.includes(c) ? `\\${c}` : c).join('');
+}
 
 bot.command('push', async (ctx) => {
     if (authorizedUsers.includes(ctx.from.id.toString())) {
@@ -58,7 +41,27 @@ bot.command('push', async (ctx) => {
     }
 });
 
-
+bot.on('message', async (ctx) => {
+    const chatId = ctx.chat?.id.toString();
+    // Проверяем, является ли чат одной из указанных групп и находится ли текущее время в указанном диапазоне
+      if (groupChatsTime.includes(chatId) && (currentHour >= 10 || currentHour < 9)) {
+        // Если условия выполняются, проверяем, является ли пользователь авторизованным
+        const isAuthorized = authorizedUsers.includes(ctx.from.id.toString());
+        if (!isAuthorized) {
+          // Если пользователь не авторизован, отправляем сообщение о начале работы группы
+          if (ctx.message?.new_chat_members || ctx.message?.left_chat_member) {
+              // Если условия выполняются, игнорируем сообщение
+              return;
+          }
+          await ctx.reply('К сожалению, режим работы чата с 10:00 по 19:00 по мск. Обратитесь за помощью в поддержку на платформе, в соответствующем разделе.');
+        }
+    } else {
+        // Если условия не выполняются, продолжаем обработку сообщений
+        await next();
+    }
+  });
+  
+  
 bot.catch((err, ctx) => {
     console.error('Ошибка бота:', err);
 });
