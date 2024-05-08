@@ -10,13 +10,14 @@ const groupChats = ['-1001980493060']; // Замените на реальные
 const groupChatsTime = ['-1001980493060']; // Замените на реальные ID групп
 const currentHour = new Date().getUTCHours() + 3; // Получаем текущий час в формате UTC и добавляем 3 часа для перевода в МСК
 
-const authorizedUsers = ['785492955', '5603587091', '1270457445']; // Замените на реальные ID пользователей
+
 function escapeMarkdownV2(text) {
     const escapeChars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
     return text.split('').map(c => escapeChars.includes(c) ? `\\${c}` : c).join('');
 }
 
 bot.command('push', async (ctx) => {
+    const authorizedUsers = ['785492955', '5603587091', '1270457445']; // Замените на реальные ID пользователей
     if (authorizedUsers.includes(ctx.from.id.toString())) {
         const messageText = ctx.message.text.slice(6);
 
@@ -42,6 +43,7 @@ bot.command('push', async (ctx) => {
 });
 
 bot.on('message', async (ctx) => {
+    const authorizedUsers = ['785492955', '5603587091', '1270457445']; // Замените на реальные ID пользователей
     const chatId = ctx.chat?.id.toString();
     // Проверяем, является ли чат одной из указанных групп и находится ли текущее время в указанном диапазоне
       if (groupChatsTime.includes(chatId) && (currentHour >= 10 || currentHour < 9)) {
