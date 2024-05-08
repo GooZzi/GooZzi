@@ -46,7 +46,7 @@ bot.on('message', async (ctx) => {
     const authorizedUsers = ['785492955', '5603587091', '1270457445']; // Замените на реальные ID пользователей
     const chatId = ctx.chat?.id.toString();
     // Проверяем, является ли чат одной из указанных групп и находится ли текущее время в указанном диапазоне
-      if (groupChatsTime.includes(chatId) && (currentHour >= 10 || currentHour < 9)) {
+      if (groupChatsTime.includes(chatId) && (currentHour < 10 || currentHour > 22)) {
         // Если условия выполняются, проверяем, является ли пользователь авторизованным
         const isAuthorized = authorizedUsers.includes(ctx.from.id.toString());
         if (!isAuthorized) {
