@@ -6,8 +6,7 @@ const { next } = require('grammy');
 const { Bot, GrammyError } = require('grammy');
 const bot = new Bot(process.env.BOT_API_KEY);
 
-const groupChats = ['-1001980493060']; // Замените на реальные ID групп
-const groupChatsTime = ['-1001980493060']; // Замените на реальные ID групп
+import { groupChats, groupChatsTime } from './group.js';
 const currentHour = new Date().getUTCHours() + 3; // Получаем текущий час в формате UTC и добавляем 3 часа для перевода в МСК
 
 
