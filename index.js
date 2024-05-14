@@ -1,4 +1,3 @@
-
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -7,7 +6,7 @@ const { Bot, GrammyError } = require('grammy');
 const bot = new Bot(process.env.BOT_API_KEY);
 
 const groupChats = ['-1001980493060']; // Замените на реальные ID групп
-const groupChatsTime = ['-1001980493060']; // Замените на реальные ID групп
+const groupChatsTime = ['-1001980493060', '-1001767502066', '-1001749412443', '-1001654327492']; // Замените на реальные ID групп
 const currentHour = new Date().getUTCHours() + 3; // Получаем текущий час в формате UTC и добавляем 3 часа для перевода в МСК
 
 
@@ -17,7 +16,7 @@ function escapeMarkdownV2(text) {
 }
 
 bot.command('push', async (ctx) => {
-    const authorizedUsers = ['785492955', '5603587091', '1270457445']; // Замените на реальные ID пользователей
+    const authorizedUsers = ['785492955']; // Замените на реальные ID пользователей
     if (authorizedUsers.includes(ctx.from.id.toString())) {
         const messageText = ctx.message.text.slice(6);
 
@@ -43,7 +42,7 @@ bot.command('push', async (ctx) => {
 });
 
 bot.on('message', async (ctx) => {
-    const authorizedUsers = ['785492955', '5603587091', '1270457445']; // Замените на реальные ID пользователей
+    const authorizedUsers = ['785492955']; // Замените на реальные ID пользователей
     const chatId = ctx.chat?.id.toString();
     // Проверяем, является ли чат одной из указанных групп и находится ли текущее время в указанном диапазоне
       if (groupChatsTime.includes(chatId) && (currentHour < 10 || currentHour > 22)) {
@@ -55,7 +54,7 @@ bot.on('message', async (ctx) => {
               // Если условия выполняются, игнорируем сообщение
               return;
           }
-          await ctx.reply('К сожалению, режим работы чата с 10:00 по 19:00 по мск. Обратитесь за помощью в поддержку на платформе, в соответствующем разделе.');
+          await ctx.reply('К сожалению, режим работы чата с 10:00 по 22:00 по мск. Обратитесь за помощью в поддержку на платформе, в соответствующем разделе. Или дождитесь ответа в рабочее время');
         }
     } else {
         // Если условия не выполняются, продолжаем обработку сообщений
