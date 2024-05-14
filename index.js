@@ -27,10 +27,11 @@ bot.command('push', async (ctx) => {
 
         const formattedMessage = `**${messageText}**`;
 
-        try {
-            for (const chatId of groupChats) {
-                await bot.api.sendMessage(chatId, formattedMessage, { parse_mode: 'MarkdownV2' });
-            }
+       try {
+    for (const chatId of groupChats) {
+        await bot.api.sendMessage(chatId, escapeMarkdownV2(formattedMessage), { parse_mode: 'MarkdownV2' });
+    }
+
             await ctx.reply('Сообщение было успешно отправлено в группы.');
         } catch (error) {
             console.error('Ошибка при отправке сообщения:', error);
