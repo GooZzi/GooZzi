@@ -7,7 +7,6 @@ const bot = new Bot(process.env.BOT_API_KEY);
 
 const currentHour = new Date().getUTCHours() + 3; // Получаем текущий час в формате UTC и добавляем 3 часа для перевода в МСК
 
-
 function escapeMarkdownV2(text) {
     const escapeChars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
     return text.split('').map(c => escapeChars.includes(c) ? `\\${c}` : c).join('');
