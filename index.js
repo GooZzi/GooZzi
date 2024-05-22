@@ -41,19 +41,43 @@ function processQueue() {
 
 processQueue();
 
+
+bot.command('push', async (ctx) => {
+  const authorizedUsers = ['785492955']; // Замените на реальные ID пользователей
+  const groupChats = ['-1001980493060','-1001728011656','-1001757183507','-669874108','-1001857175790','-1001845076622']; // Замените на реальные ID групп
+  if (authorizedUsers.includes(ctx.from.id.toString())) {
+      const messageText = ctx.message.text.slice(6);
+
+      if (messageText.trim() === '') {
+          await ctx.reply('Пожалуйста, добавьте текст сообщения после команды /push.');
+          return;
+      }
+
+      const formattedMessage = `${messageText}`;
+
+      for (const chatId of groupChats) {
+          sendMessage(chatId, formattedMessage);
+      }
+
+      await ctx.reply('Сообщение было успешно отправлено в группы.');
+  } else {
+      await ctx.reply('У вас нет доступа для использования этой команды.');
+  }
+});
+
 bot.on('message', async (ctx) => {
-    const authorizedUsers = ['785492955']; // Замените на реальные ID пользователей
-    const groupChatsTime = ['-1001980493060', '-1001728011656','-1001757183507','-669874108','-1001857175790','-1001845076622']; // Замените на реальные ID групп
+    const authorizedUsers = ['785492955', '1957119524']; // Замените на реальные ID пользователей
+    const groupChatsTime = ['-1001980493060']; // Замените на реальные ID групп
     const chatId = ctx.chat?.id.toString();
     // Проверяем, является ли чат одной из указанных групп и находится ли текущее время в указанном диапазоне
-      if (groupChatsTime.includes(chatId) && (currentHour < 10 || currentHour > 22)) {
+      if (groupChatsTime.includes(chatId) && (currentHour < 10 || currentHour > 23)) {
         // Если условия выполняются, проверяем, является ли пользователь авторизованным
         const isAuthorized = authorizedUsers.includes(ctx.from.id.toString());
         if (!isAuthorized) {
           // Если пользователь не авторизован, отправляем сообщение о начале работы группы
           if (ctx.message?.new_chat_members || ctx.message?.left_chat_member) {
               // Если условия выполняются, игнорируем сообщение
-              return;
+              await next();
           }
           await ctx.reply('К сожалению, режим работы чата с 10:00. Обратитесь за помощью в поддержку на платформе, в соответствующем разделе.');
         }
@@ -63,32 +87,12 @@ bot.on('message', async (ctx) => {
     }
   });
 
-bot.command('push', async (ctx) => {
-    const authorizedUsers = ['785492955']; // Замените на реальные ID пользователей
-    const groupChats = ['-1001980493060']; // Замените на реальные ID групп
-    if (authorizedUsers.includes(ctx.from.id.toString())) {
-        const messageText = ctx.message.text.slice(6);
 
-        if (messageText.trim() === '') {
-            await ctx.reply('Пожалуйста, добавьте текст сообщения после команды /push.');
-            return;
-        }
-
-        const formattedMessage = `**${messageText}**`;
-
-        for (const chatId of groupChats) {
-            sendMessage(chatId, formattedMessage);
-        }
-
-        await ctx.reply('Сообщение было успешно отправлено в группы.');
-    } else {
-        await ctx.reply('У вас нет доступа для использования этой команды.');
-    }
-});
   
-bot.catch((err, ctx) => {
+bot.catch('err', async(ctx) => {
     console.error('Ошибка бота:', err);
-    await ctx.reply(error)
+    await ctx.reply('Ошибка');
+    
 });
 
 bot.start();
