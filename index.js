@@ -13,7 +13,7 @@ function escapeMarkdownV2(text) {
 
 bbot.command('push', async (ctx) => {
     const authorizedUsers = ['785492955']; // Замените на реальные ID пользователей
-    const groupChats = ['-1001980493060']; // Замените на реальные ID групп
+    const groupChats = ['-1001980493060', '5603587091', '1060887470', '6364872291']; // Замените на реальные ID групп
     if (authorizedUsers.includes(ctx.from.id.toString())) {
         const messageText = ctx.message.text.slice(6);
 
