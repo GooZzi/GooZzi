@@ -22,12 +22,12 @@ bbot.command('push', async (ctx) => {
             return;
         }
 
-        const formattedMessage = `**${messageText}**`;
+        const formattedMessage = `${messageText}`;
 
         for (const chatId of groupChats) {
             try {
                 await bot.api.sendMessage(chatId, escapeMarkdownV2(formattedMessage), { parse_mode: 'MarkdownV2' });
-                await new Promise(resolve => setTimeout(resolve, 2000)); // Задержка в 2 секунды
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Задержка в 1 секунды
             } catch (error) {
                 console.error('Ошибка при отправке сообщения:', error);
             }
@@ -50,7 +50,7 @@ bot.on('message', async (ctx) => {
         await ctx.reply('Добрый день, к сожалению, режим работы чата с 10:00 по московскому времени. Обратитесь за помощью в поддержку на платформе, в соответствующем разделе.');
     } else {
         // Если условия не выполняются, продолжаем обработку сообщений
-        await next();
+        return;
     }
 });
 
