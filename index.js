@@ -45,12 +45,13 @@ bot.on('message', async (ctx) => {
     const currentHour = new Date().getUTCHours() + 3; // Получаем текущий час в формате UTC и добавляем 3 часа для перевода в МСК
 
     // Проверяем, является ли чат одной из указанных групп и находится ли текущее время в указанном диапазоне
-    if (groupChatsTime.includes(chatId) && (currentHour < 10 || currentHour > 22)) {
+    if (groupChatsTime.includes(chatId) && (currentHour < 10 || currentHour > 15)) {
     if ((ctx.message?.new_chat_members || ctx.message?.left_chat_member)){
             return;
         }
         // Если условия выполняются, отправляем сообщение о начале работы группы
-       await ctx.replyWithPhoto({ source: 'GooZzi/pic.jpg' }, { caption: 'Добрый день, к сожалению, режим работы чата с 10:00 по московскому времени. Обратитесь за помощью в поддержку на платформе, в соответствующем разделе.' });
+       await ctx.replyWithPhoto('https://bitrix.b2pos.ru/~vWZ3X', { caption: 'Здравствуйте, уважаемые коллеги! Данный чат доступен с 10:00 по московскому времени. Если вам требуется помощь, пожалуйста, обратитесь в раздел поддержки на нашей платформе.
+На скриншоте выше показано, где находится чат тех. поддержки. Спасибо!' });
     } else {
         // Если условия не выполняются, продолжаем обработку сообщений
         return;
